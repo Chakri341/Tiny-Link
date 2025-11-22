@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Link from "next/link";
+import { Toaster } from "sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,21 +29,22 @@ export default function RootLayout({
     <html lang="en">
      <body className="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
 
-        <header className="bg-white shadow-sm">
-          <div className="max-w-5xl mx-auto p-4 flex justify-between items-center">
+        <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-lg supports-[backdrop-filter]:bg-white/60 shadow-sm">
+          <div className="max-w-5xl mx-auto p-3 flex justify-between items-center">
             <Link href="/" className="font-bold text-lg">TinyLink</Link>
           </div>
         </header>
 
         <main className="max-w-5xl mx-auto w-full p-4 flex-1">
+           <Toaster richColors />
           {children}
         </main>
 
-        <footer className="bg-white border-t">
+        {/* <footer className="bg-white border-t sticky bottom-0 z-50">
           <div className="max-w-5xl mx-auto px-4 py-4 text-sm text-gray-500">
             © TinyLink 
           </div>
-        </footer>
+        </footer> */}
       </body>
     </html>
   );
