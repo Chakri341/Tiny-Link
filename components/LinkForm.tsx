@@ -68,43 +68,50 @@ export default function LinkForm({ onCreate }: { onCreate: (link: any) => void }
 
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-4 rounded-xl shadow-sm border md:w-1/2 w-full mx-auto">
-      <h2 className="text-lg font-bold mb-3 text-center">Create Short Link</h2>
+  <form
+    onSubmit={handleSubmit}
+    className="flex flex-col gap-4 bg-white p-6 rounded-xl border shadow-sm "
+  >
+    <h2 className="text-xl font-semibold text-gray-800 text-center">
+      Create Short Link
+    </h2>
 
-      <input
-        className="border rounded-lg w-full p-2 mb-3"
-        placeholder="https://example.com"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-      />
-
-      <input
-        className="border rounded-lg w-full p-2 mb-3"
-        placeholder="Custom code (optional)"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-      />
-
-      {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
-
-      <div className="flex justify-center">
-        <button
-          disabled={loading}
-          className={clsx(
-            "px-2 py-2 rounded font-medium w-1/2",
-            loading ? "opacity-60 bg-gray-300" : "bg-blue-500 text-white"
-          )}
-        >
-          {loading ? (
-            <div className="flex items-center gap-2  justify-center">
-              <span>Creating..</span>
-              <span className="inline-block h-4 w-4 border-b-2 border-white border-t-transparent rounded-full animate-spin"></span>
-            </div>
-          ) : (
-            "Create"
-          )}
-        </button>
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <input
+          className="border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+          placeholder="https://example.com"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
       </div>
-    </form>
-  )
+
+      <div className="flex flex-col gap-1">
+        <input
+          className="border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+          placeholder="Custom code (optional)"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+        />
+      </div>
+    </div>
+
+    {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+
+    <button
+      disabled={loading}
+      className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-center font-medium transition disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {loading ? (
+        <div className="flex justify-center items-center gap-2">
+          <span>Creating</span>
+          <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+        </div>
+      ) : (
+        "Create"
+      )}
+    </button>
+  </form>
+);
+
 }

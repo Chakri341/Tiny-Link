@@ -35,7 +35,7 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main className="max-w-5xl mx-auto w-full p-4 flex-1">
+        <main className="max-w-6xl mx-auto w-full p-4 flex-1">
            <Toaster richColors />
           {children}
         </main>
