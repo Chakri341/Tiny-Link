@@ -1,29 +1,145 @@
-"use client"
+// "use client"
+
+// import { useState } from "react";
+// import clsx from "clsx";
+// import { toast } from "sonner";
+
+// export default function LinkForm({ onCreate }: { onCreate: (link: any) => void }) {
+//   const [url, setUrl] = useState("")
+//   const [code, setCode] = useState("")
+//   const [loading, setLoading] = useState(false)
+//   const [error, setError] = useState<string | null>(null)
+
+//   async function handleSubmit(e: React.FormEvent) {
+//     e.preventDefault();
+//     setError(null);
+//     setLoading(true);
+
+//     if (!url.startsWith("http://") && !url.startsWith("https://")) {
+//       setError("URL must start with http:// or https://");
+//       setLoading(false);
+//       return;
+//     }
+
+//     if (code && !/^[A-Za-z0-9]{6,8}$/.test(code)) {
+//       setError("Code must be 6–8 characters and only letters or numbers.");
+//       setLoading(false);
+//       return;
+//     }
+
+//     try {
+//       const res = await fetch("/api/links", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ url, code: code || undefined }),
+//       });
+
+//       const data = await res.json();
+
+//       if (res.status === 409) {
+//         setError("Code already exists");
+//         toast.error("Code already exists");
+//         setLoading(false);
+//         return;
+//       }
+
+//       if (!res.ok) {
+//         setError(data.error || "Failed to create link");
+//         toast.error(data.error || "Failed to create link");
+//         setLoading(false);
+//         return;
+//       }
+
+//       onCreate(data);
+
+//       setUrl("");
+//       setCode("");
+
+//       toast.success("Link created successfully!");
+
+//     } catch (err: any) {
+//       setError("Something went wrong");
+//       toast.error("Something went wrong!");
+//     } finally {
+//       setLoading(false);
+//     }
+//   }
+
+//   return (
+//     <form
+//       onSubmit={handleSubmit}
+//       className="flex flex-col gap-4 bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm dark:text-white"
+      
+//     >
+//       <h2 className="text-xl font-semibold text-gray-800 text-center dark:text-white">
+//         Create Short Link
+//       </h2>
+
+//       <div className="flex flex-col gap-3">
+//         <div className="flex flex-col gap-1">
+//           <input
+//             className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+//             placeholder="https://example.com"
+//             value={url}
+//             onChange={(e) => setUrl(e.target.value)}
+//           />
+//         </div>
+
+//         <div className="flex flex-col gap-1">
+//           <input
+//             className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+//             placeholder="Custom code (optional)"
+//             value={code}
+//             onChange={(e) => setCode(e.target.value)}
+//           />
+//         </div>
+//       </div>
+
+//       {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+
+//       <button
+//         disabled={loading}
+//         className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-center font-medium transition disabled:opacity-60 disabled:cursor-not-allowed"
+//       >
+//         {loading ? (
+//           <div className="flex justify-center items-center gap-2">
+//             <span>Creating</span>
+//             <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+//           </div>
+//         ) : (
+//           "Create"
+//         )}
+//       </button>
+//     </form>
+//   );
+
+// }
+"use client";
 
 import { useState } from "react";
-import clsx from "clsx";
+import { toast } from "sonner";
 
-export default function LinkForm() {
-  const [url, setUrl] = useState("")
-  const [code, setCode] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export default function LinkForm({ onCreate }: { onCreate: (link: any) => void }) {
+  const [url, setUrl] = useState("");
+  const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
 
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
-      setError("URL must start with http:// or https://")
-      setLoading(false)
-      return
+      setError("URL must start with http:// or https://");
+      setLoading(false);
+      return;
     }
 
     if (code && !/^[A-Za-z0-9]{6,8}$/.test(code)) {
-      setError("Code must be 6–8 characters and only letters or numbers.")
-      setLoading(false)
-      return
+      setError("Code must be 6–8 characters and only letters or numbers");
+      setLoading(false);
+      return;
     }
 
     try {
@@ -31,68 +147,92 @@ export default function LinkForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, code: code || undefined }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (res.status === 409) {
-        setError("Code already exists")
-        setLoading(false)
+        setError("Code already exists");
+        toast.error("Code already exists");
+        setLoading(false);
         return;
       }
 
       if (!res.ok) {
-        setError(data.error || "Failed to create link")
-        setLoading(false)
+        setError(data.error || "Failed to create link");
+        toast.error(data.error || "Failed to create link");
+        setLoading(false);
         return;
       }
 
-      // const shortUrl = `${window.location.origin}/${data.code}`
-      // alert(`Short URL created:\n${shortUrl}`)
-
+      onCreate(data); // update table instantly
       setUrl("");
       setCode("");
+      toast.success("Link created successfully!");
+    } catch {
+      setError("Something went wrong");
+      toast.error("Something went wrong!");
+    } finally {
       setLoading(false);
-      window.location.reload()
-    } catch (err: any) {
-      setError(err.message || "Something went wrong")
-      setLoading(false)
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-sm border w-1/2 mx-auto">
-      <h2 className="text-lg font-bold mb-3 text-center">Create Short Link</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-5 rounded-xl p-6 shadow-sm border
+                 bg-white dark:bg-slate-800
+                 border-gray-200 dark:border-slate-700"
+    >
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 text-center">
+        Create Short Link
+      </h2>
 
-      <input
-        className="border rounded-lg w-full p-2 mb-3"
-        placeholder="https://example.com"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-      />
+      <div className="flex flex-col gap-4">
+        <input
+          className="border border-gray-300 dark:border-slate-600
+                     bg-white dark:bg-slate-700
+                     text-gray-900 dark:text-gray-100
+                     rounded-lg px-3 py-2 w-full
+                     focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="https://example.com"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
 
-      <input
-        className="border rounded-lg w-full p-2 mb-3"
-        placeholder="Custom code (optional)"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-      />
-
-      {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
-
-      <div className="flex justify-center">
-        <button
-          disabled={loading}
-          className={clsx(
-            "px-4 py-2 rounded font-medium w-full",
-            loading ? "opacity-60 bg-gray-300" : "bg-blue-500 text-white"
-          )}
-        >
-          {loading ? "Creating…" : "Create"}
-        </button>
+        <input
+          className="border border-gray-300 dark:border-slate-600
+                     bg-white dark:bg-slate-700
+                     text-gray-900 dark:text-gray-100
+                     rounded-lg px-3 py-2 w-full
+                     focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Custom code (optional)"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+        />
       </div>
 
+      {error && (
+        <p className="text-red-500 dark:text-red-400 text-sm text-center">
+          {error}
+        </p>
+      )}
 
+      <button
+        disabled={loading}
+        className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium
+                   transition shadow disabled:opacity-60 disabled:cursor-not-allowed
+                   dark:shadow-none"
+      >
+        {loading ? (
+          <div className="flex justify-center items-center gap-2">
+            <span>Creating...</span>
+            <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          </div>
+        ) : (
+          "Create"
+        )}
+      </button>
     </form>
-  )
+  );
 }

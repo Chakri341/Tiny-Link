@@ -1,14 +1,38 @@
 import prisma from "../../../lib/prisma"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { nanoid } from "nanoid"
 
 const CODE_REGEX = /^[A-Za-z0-9]{6,8}$/
 
-export async function GET() {
-  const links = await prisma.link.findMany({
-    orderBy: { createdAt: "desc" },
-  })
-  return NextResponse.json(links)
+// export async function GET() {
+//   const links = await prisma.link.findMany({
+//     orderBy: { createdAt: "desc" },
+//   })
+//   return NextResponse.json(links)
+// }
+
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const pageParam = searchParams.get("page") ?? "1";
+  const limitParam = searchParams.get("limit") ?? "20";
+
+  const page = Number(pageParam) || 1;
+  const limit = Number(limitParam) || 20;
+
+  const skip = (page - 1) * limit;
+
+  const [links, total] = await Promise.all([
+    prisma.link.findMany({
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+    }),
+    prisma.link.count(),
+  ]);
+
+  const hasMore = page * limit < total;
+
+  return NextResponse.json({ links, hasMore });
 }
 
 export async function POST(request: Request) {
@@ -35,3 +59,5 @@ export async function POST(request: Request) {
 
   return NextResponse.json(created, { status: 201 })
 }
+
+
