@@ -4,8 +4,8 @@ import { toast } from "sonner";
 
 export default function StatsClient({ link }: { link: any }) {
   return (
-    <div className="max-w-2xl mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6 text-gray-900">
+    <div className="max-w-2xl mx-auto py-5">
+      <h1 className="text-3xl font-bold mb-2 text-gray-900">
         Link Statistics
       </h1>
 

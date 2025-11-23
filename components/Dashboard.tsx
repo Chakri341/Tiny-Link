@@ -9,15 +9,15 @@ export default async function Dashboard() {
     take: PAGE_SIZE,
   });
 
-  const hasMore = links.length === PAGE_SIZE; 
+  const hasMore = links.length === PAGE_SIZE;
 
   return (
-    <div className="space-y-6">
-      <LinksTable
-        initialLinks={links}
-        pageSize={PAGE_SIZE}
-        initialHasMore={hasMore}
-      />
-    </div>
+
+    <LinksTable
+      initialLinks={links}
+      pageSize={PAGE_SIZE}
+      initialHasMore={hasMore}
+    />
+
   );
 }
