@@ -202,7 +202,7 @@ export default function LinksTable({
                         <button
                           onClick={() => onDelete(l.code)}
                           disabled={deleting === l.code}
-                          className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-50 transition"
+                          className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-50 transition border p-1  rounded text-xs hover:bg-slate-200"
                         >
                           {deleting === l.code ? "Deleting…" : "Delete"}
                         </button>
