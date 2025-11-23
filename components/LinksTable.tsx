@@ -269,6 +269,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import LinkForm from "./LinkForm";
 import { LinkItem, LinksTableProps } from "@/lib/types";
+import AnalyticsChart from "./AnalyticsChart";
 
 export default function LinksTable({
   initialLinks,
@@ -370,8 +371,11 @@ export default function LinksTable({
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-[85vh]">
 
       {/* FORM */}
-      <div className="col-span-1 rounded-xl shadow-sm border bg-white dark:bg-slate-800 dark:border-slate-700 self-start">
+      <div className="col-span-1 rounded-xl shadow-sm border  dark:bg-slate-800 dark:border-slate-700 self-start">
+       <div className="flex flex-col gap-3">
         <LinkForm onCreate={addLink} />
+        <AnalyticsChart/>
+       </div>
       </div>
 
       {/* TABLE */}
