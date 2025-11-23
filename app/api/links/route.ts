@@ -2,18 +2,8 @@ import prisma from "../../../lib/prisma"
 import { NextRequest, NextResponse } from "next/server"
 import { nanoid } from "nanoid"
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
-
 const CODE_REGEX = /^[A-Za-z0-9]{6,8}$/
 
-// export async function GET() {
-//   const links = await prisma.link.findMany({
-//     orderBy: { createdAt: "desc" },
-//   })
-//   return NextResponse.json(links)
-// }
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
