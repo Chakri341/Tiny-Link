@@ -134,6 +134,7 @@ export default function LinksTable({
             <thead className="sticky top-0 z-10 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-b dark:border-slate-600">
               <tr>
                 {[
+                  { label: "Created At", col: "createdAt" },
                   { label: "Code", col: "code" },
                   { label: "Clicks", col: "clicks" },
                   { label: "Last Clicked", col: "lastClicked" },
@@ -174,6 +175,22 @@ export default function LinksTable({
                   const shortUrl = `${origin}/${l.code}`;
                   return (
                     <tr key={l.code} className="border-b dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 transition">
+                      
+
+                       <td className="py-3 px-4 text-center">
+                        {l.createdAt ? (
+                          <>
+                            <div>{new Date(l.createdAt).toLocaleDateString()}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                              {new Date(l.createdAt).toLocaleTimeString()}
+                            </div>
+                          </>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+
+                      
                       <td className="py-3 px-4 text-center">
                         <div className="flex items-center justify-center gap-2">
                           <Link
@@ -199,9 +216,26 @@ export default function LinksTable({
                       <td className="py-3 px-4 text-center">{l.clicks}</td>
 
 
-                      <td className="py-3 px-4 text-center">
+                      {/* <td className="py-3 px-4 text-center">
                         {l.lastClicked ? new Date(l.lastClicked).toLocaleString() : "-"}
+                      </td> */}
+
+                     
+
+
+                      <td className="py-3 px-4 text-center">
+                        {l.lastClicked ? (
+                          <>
+                            <div>{new Date(l.lastClicked).toLocaleDateString()}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                              {new Date(l.lastClicked).toLocaleTimeString()}
+                            </div>
+                          </>
+                        ) : (
+                          "-"
+                        )}
                       </td>
+
 
                       <td className="py-3 px-4 max-w-[350px] truncate">
                         <a href={l.url} target="_blank" className="hover:underline text-gray-600 dark:text-gray-300 text-center">
