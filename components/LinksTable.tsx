@@ -97,7 +97,7 @@ export default function LinksTable({
     if (sortBy === "lastClicked") {
       x = a.lastClicked ? new Date(a.lastClicked).getTime() : 0;
       y = b.lastClicked ? new Date(b.lastClicked).getTime() : 0;
-    }else if(sortBy === "createdAt"){
+    } else if (sortBy === "createdAt") {
       x = a.createdAt ? new Date(a.createdAt).getTime() : 0;
       y = b.createdAt ? new Date(b.createdAt).getTime() : 0;
     }
@@ -112,10 +112,10 @@ export default function LinksTable({
 
       {/* FORM */}
       <div className="col-span-1 rounded-xl shadow-sm border  dark:bg-slate-800 dark:border-slate-700 self-start">
-       <div className="flex flex-col gap-3">
-        <LinkForm onCreate={addLink} />
-        <AnalyticsChart/>
-       </div>
+        <div className="flex flex-col gap-3">
+          <LinkForm onCreate={addLink} />
+          <AnalyticsChart />
+        </div>
       </div>
 
       {/* TABLE */}
@@ -146,6 +146,7 @@ export default function LinksTable({
                     <span className={sortBy === col ? "text-blue-600 dark:text-blue-400 text-center" : "text-center"}>
                       {label} {sortBy === col && (sortDir === "asc" ? "↑" : "↓")}
                     </span>
+
                   </th>
                 ))}
                 <th className="py-3 px-4 text-center">URL</th>
@@ -174,12 +175,29 @@ export default function LinksTable({
                   return (
                     <tr key={l.code} className="border-b dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 transition">
                       <td className="py-3 px-4 text-center">
-                        <Link href={`/code/${l.code}`} className="text-blue-600 dark:text-blue-400 hover:underline">
-                          {l.code}
-                        </Link>
+                        <div className="flex items-center justify-center gap-2">
+                          <Link
+                            href={`/code/${l.code}`}
+                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          >
+                            {l.code}
+                          </Link>
+
+                          <a
+                            href={shortUrl}
+                            target="_blank"
+                            title="Open short URL"
+                            className="text-gray-500 dark:text-gray-300 hover:text-blue-500 transition
+                 p-1 rounded-md hover:bg-gray-200 dark:hover:bg-slate-600"
+                          >
+                            ↗
+                          </a>
+                        </div>
                       </td>
 
+
                       <td className="py-3 px-4 text-center">{l.clicks}</td>
+
 
                       <td className="py-3 px-4 text-center">
                         {l.lastClicked ? new Date(l.lastClicked).toLocaleString() : "-"}
