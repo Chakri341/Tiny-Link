@@ -1,6 +1,7 @@
 import prisma from "../../../lib/prisma"
 import { notFound } from "next/navigation"
 import StatsClient from "./StatsClient"
+import { getBaseUrl } from "@/utils/getBaseUrl"
 
 export default async function StatsPage({ params }: { params: { code: string } }) {
   const link = await prisma.link.findUnique({
@@ -9,8 +10,11 @@ export default async function StatsPage({ params }: { params: { code: string } }
 
   if (!link) return notFound()
 
-  const base = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-  const shortUrl = `${base}/${link.code}`
+  const origin = await getBaseUrl();
+  // console.log("url origin ==> ", origin)
+
+  const shortUrl = `${origin}/${link.code}`
+
 
   return <StatsClient link={{ ...link, shortUrl }} />
 }
