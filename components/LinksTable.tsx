@@ -159,8 +159,8 @@ export default function LinksTable({
               {loadingPage ? (
                 Array.from({ length: 8 }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
-                    <td colSpan={5} className="py-3 px-4">
-                      <div className="h-3 w-full bg-gray-300 dark:bg-slate-600 rounded" />
+                    <td colSpan={6} className="py-3 px-4">
+                      <div className="h-5 w-full bg-gray-300 dark:bg-slate-600 rounded" />
                     </td>
                   </tr>
                 ))
