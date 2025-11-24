@@ -17,7 +17,7 @@ export default function StatsClient({ link }: { link: any }) {
             <p className="text-sm font-medium text-gray-600">Short URL</p>
             <a
               href={`/${link.code}`}
-              target="_blank"
+              // target="_blank"
               className="text-lg font-semibold text-blue-600 hover:underline"
             >
               {link.shortUrl}

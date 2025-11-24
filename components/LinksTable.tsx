@@ -185,7 +185,7 @@ export default function LinksTable({
 
                           <a
                             href={shortUrl}
-                            target="_blank"
+                            // target="_blank"
                             title="Open short URL"
                             className="text-gray-500 dark:text-gray-300 hover:text-blue-500 transition
                  p-1 rounded-md hover:bg-gray-200 dark:hover:bg-slate-600"
