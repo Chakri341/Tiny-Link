@@ -2,32 +2,31 @@ import prisma from "../../../lib/prisma"
 import { NextRequest, NextResponse } from "next/server"
 import { nanoid } from "nanoid"
 
+
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+
 const CODE_REGEX = /^[A-Za-z0-9]{6,8}$/
 
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const pageParam = searchParams.get("page") ?? "1";
-  const limitParam = searchParams.get("limit") ?? "20";
-
-  const page = Number(pageParam) || 1;
-  const limit = Number(limitParam) || 20;
+  const page = Number(searchParams.get("page") || 1);
+  const limit = Number(searchParams.get("limit") || 20);
 
   const skip = (page - 1) * limit;
 
-  const [links, total] = await Promise.all([
-    prisma.link.findMany({
-      orderBy: { createdAt: "desc" },
-      skip,
-      take: limit,
-    }),
-    prisma.link.count(),
-  ]);
+  const links = await prisma.link.findMany({
+    orderBy: { createdAt: "desc" },
+    skip,
+    take: limit,
+  });
 
-  const hasMore = page * limit < total;
+  const hasMore = links.length === limit;
 
-  return NextResponse.json({ links, hasMore });
+  return Response.json({ links, hasMore });
 }
+
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}))

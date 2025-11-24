@@ -8,12 +8,12 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Dashboard() {
-  const links = await prisma.link.findMany({
-    orderBy: { createdAt: "desc" },
-    take: PAGE_SIZE,
+ const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/links?page=1&limit=${PAGE_SIZE}`, {
+    cache: "no-store",
   });
 
-  const hasMore = links.length === PAGE_SIZE;
+  const data = await res.json();
+
 
   return (
     <div className="space-y-2">
@@ -22,9 +22,9 @@ export default async function Dashboard() {
       </div> */}
 
       <LinksTable
-        initialLinks={links}
+        initialLinks={data.links}
         pageSize={PAGE_SIZE}
-        initialHasMore={hasMore}
+        initialHasMore={data.hasMore}
       />
     </div>
 
