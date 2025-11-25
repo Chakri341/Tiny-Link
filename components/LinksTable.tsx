@@ -8,6 +8,7 @@ import { LinkItem, LinksTableProps } from "@/lib/types";
 import AnalyticsChart from "./AnalyticsChart";
 import QRCodeModal from "./QRCodeModal";
 import Image from "next/image";
+import ShareModal from "./ShareModal";
 
 export default function LinksTable({
   initialLinks,
@@ -25,6 +26,8 @@ export default function LinksTable({
   const [qrFor, setQrFor] = useState<{ code: string; shortUrl: string } | null>(null);
   const [sortBy, setSortBy] = useState<"code" | "clicks" | "lastClicked" | "createdAt">("createdAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [shareFor, setShareFor] = useState<string | null>(null);
+
 
   useEffect(() => {
     setOrigin(window.location.origin);
@@ -123,13 +126,24 @@ export default function LinksTable({
       {/* TABLE */}
       <div className="col-span-3 flex flex-col rounded-xl shadow-sm border bg-white dark:bg-slate-800 dark:border-slate-700 px-4 py-2 overflow-hidden">
 
+
         {/* Search */}
-        <input
-          className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none mb-3"
-          placeholder="Search by code or URL"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
+        <div className="flex items-center gap-2 mb-3">
+          <input
+            className="flex-1 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            placeholder="Search by code or URL"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+
+          <button
+            onClick={() => window.open("/api/export/csv", "_blank")}
+            className="px-3 py-2 rounded-lg text-sm bg-blue-600 hover:bg-blue-700 text-white transition shadow whitespace-nowrap"
+          >
+            ⬇ Export CSV
+          </button>
+        </div>
+
 
         <div className="flex-1 overflow-y-auto">
           <table className="min-w-full text-sm">
@@ -250,7 +264,6 @@ export default function LinksTable({
                       <td className="py-3 px-4 text-right flex items-center gap-2 justify-end">
                         <button onClick={() => copyToClipboard(shortUrl, l.code)}>
                           <div>
-
                             <Image
                               src="/copy.png"
                               alt="Copy"
@@ -261,8 +274,18 @@ export default function LinksTable({
       `}
                             />
                           </div>
-
                         </button>
+
+                        <button onClick={() => setShareFor(shortUrl)} className="flex flex-col items-center">
+                          <Image
+                            src="/share.png"
+                            alt="Share"
+                            width={15}
+                            height={15}
+                            className="opacity-80 hover:opacity-100 transition cursor-pointer"
+                          />
+                        </button>
+
 
                         <button onClick={() => setQrFor({ code: l.code, shortUrl })}>
                           <Image
@@ -284,6 +307,8 @@ export default function LinksTable({
                             className=" transition cursor-pointer"
                           />
                         </button>
+
+
                       </td>
                     </tr>
                   );
@@ -322,6 +347,14 @@ export default function LinksTable({
             onClose={() => setQrFor(null)}
           />
         )}
+
+        {shareFor && (
+          <ShareModal
+            shortUrl={shareFor}
+            onClose={() => setShareFor(null)}
+          />
+        )}
+
 
       </div>
     </div>
