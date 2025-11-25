@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import LinkForm from "./LinkForm";
 import { LinkItem, LinksTableProps } from "@/lib/types";
 import AnalyticsChart from "./AnalyticsChart";
+import QRCodeModal from "./QRCodeModal";
+import Image from "next/image";
 
 export default function LinksTable({
   initialLinks,
@@ -20,7 +22,7 @@ export default function LinksTable({
   const [loadingPage, setLoadingPage] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
-
+  const [qrFor, setQrFor] = useState<{ code: string; shortUrl: string } | null>(null);
   const [sortBy, setSortBy] = useState<"code" | "clicks" | "lastClicked" | "createdAt">("createdAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
@@ -175,9 +177,9 @@ export default function LinksTable({
                   const shortUrl = `${origin}/${l.code}`;
                   return (
                     <tr key={l.code} className="border-b dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 transition">
-                      
 
-                       <td className="py-3 px-4 text-center">
+
+                      <td className="py-3 px-4 text-center">
                         {l.createdAt ? (
                           <>
                             <div>{new Date(l.createdAt).toLocaleDateString()}</div>
@@ -190,7 +192,7 @@ export default function LinksTable({
                         )}
                       </td>
 
-                      
+
                       <td className="py-3 px-4 text-center">
                         <div className="flex items-center justify-center gap-2">
                           <Link
@@ -220,7 +222,8 @@ export default function LinksTable({
                         {l.lastClicked ? new Date(l.lastClicked).toLocaleString() : "-"}
                       </td> */}
 
-                     
+
+
 
 
                       <td className="py-3 px-4 text-center">
@@ -243,20 +246,43 @@ export default function LinksTable({
                         </a>
                       </td>
 
-                      <td className="py-3 px-4 text-right">
-                        <button
-                          onClick={() => copyToClipboard(shortUrl, l.code)}
-                          className="mr-3 border px-2 py-1 rounded text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-600 transition w-20"
-                        >
-                          {copiedCode === l.code ? "Copied!" : "Copy"}
+
+                      <td className="py-3 px-4 text-right flex items-center gap-2 justify-end">
+                        <button onClick={() => copyToClipboard(shortUrl, l.code)}>
+                          <div>
+
+                            <Image
+                              src="/copy.png"
+                              alt="Copy"
+                              width={20}
+                              height={20}
+                              className={`cursor-pointer transition 
+        ${copiedCode === l.code ? "scale-75 " : ""}
+      `}
+                            />
+                          </div>
+
                         </button>
 
-                        <button
-                          onClick={() => onDelete(l.code)}
-                          disabled={deleting === l.code}
-                          className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-50 transition border p-1  rounded text-xs hover:bg-slate-200"
-                        >
-                          {deleting === l.code ? "Deleting…" : "Delete"}
+                        <button onClick={() => setQrFor({ code: l.code, shortUrl })}>
+                          <Image
+                            src="/qr.png"
+                            alt="QR"
+                            width={20}
+                            height={20}
+                            className=" transition cursor-pointer"
+                          />
+
+                        </button>
+
+                        <button onClick={() => onDelete(l.code)} disabled={deleting === l.code}>
+                          <Image
+                            src="/trash.png"
+                            alt="Delete"
+                            width={20}
+                            height={20}
+                            className=" transition cursor-pointer"
+                          />
                         </button>
                       </td>
                     </tr>
@@ -288,6 +314,15 @@ export default function LinksTable({
             Next →
           </button>
         </div>
+
+        {qrFor && (
+          <QRCodeModal
+            code={qrFor.code}
+            shortUrl={qrFor.shortUrl}
+            onClose={() => setQrFor(null)}
+          />
+        )}
+
       </div>
     </div>
   );
