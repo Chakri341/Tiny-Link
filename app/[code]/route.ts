@@ -19,5 +19,5 @@ export async function GET(
     },
   })
 
-  return NextResponse.redirect(link.url)
+  return NextResponse.redirect(link.url, { status: 302 })
 }
