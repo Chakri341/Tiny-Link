@@ -13,4 +13,5 @@ model Link {
   clicks      Int      @default(0)
   createdAt   DateTime @default(now())
   lastClicked DateTime?
+  expiresAt   DateTime?  
 }

@@ -1,5 +1,5 @@
 import prisma from "../../../lib/prisma"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { nanoid } from "nanoid"
 
 
@@ -30,7 +30,8 @@ export async function GET(req: Request) {
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}))
-  const { url, code } = body
+  const { url, code, expiresAt } = body
+
 
   if (!url)
     return NextResponse.json({ error: "Missing URL" }, { status: 400 })
@@ -46,9 +47,14 @@ export async function POST(request: Request) {
 
   const finalCode = code || nanoid(7)
 
+
   const created = await prisma.link.create({
-    data: { code: finalCode, url },
+    data: {
+      code: finalCode, url, expiresAt: expiresAt ? new Date(expiresAt) : null
+    },
   })
+  console.log("created ====> ", created)
+
 
   return NextResponse.json(created, { status: 201 })
 }

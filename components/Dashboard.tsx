@@ -1,6 +1,5 @@
 import LinksTable from "./LinksTable";
 import prisma from "@/lib/prisma";
-import SeedButton from "./Seedbutton";
 
 const PAGE_SIZE = 20;
 
@@ -8,11 +7,16 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Dashboard() {
- const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/links?page=1&limit=${PAGE_SIZE}`, {
-    cache: "no-store",
+
+  const links = await prisma.link.findMany({
+    orderBy: { createdAt: "desc" },
+    take: PAGE_SIZE,
   });
 
-  const data = await res.json();
+  // Determine if more pages exist
+  const hasMore = links.length === PAGE_SIZE;
+
+  // console.log("data dash ==>>>>>>>>>>>>", { links, hasMore });
 
 
   return (
@@ -22,9 +26,9 @@ export default async function Dashboard() {
       </div> */}
 
       <LinksTable
-        initialLinks={data.links}
+        initialLinks={links}
         pageSize={PAGE_SIZE}
-        initialHasMore={data.hasMore}
+        initialHasMore={hasMore}
       />
     </div>
 

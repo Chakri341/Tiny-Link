@@ -111,6 +111,8 @@ export default function LinksTable({
     return x > y ? -1 : 1;
   });
 
+  // console.log("list ===> ", sorted)
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-[85vh]">
@@ -168,6 +170,7 @@ export default function LinksTable({
                 ))}
                 <th className="py-3 px-4 text-center">URL</th>
                 <th className="py-3 px-4 text-center">Actions</th>
+                <th className="py-3 px-4 text-center">Status</th>
               </tr>
             </thead>
 
@@ -260,6 +263,8 @@ export default function LinksTable({
                         </a>
                       </td>
 
+                     
+
 
                       <td className="py-3 px-4 text-right flex items-center gap-2 justify-end">
                         <button onClick={() => copyToClipboard(shortUrl, l.code)}>
@@ -280,8 +285,8 @@ export default function LinksTable({
                           <Image
                             src="/share.png"
                             alt="Share"
-                            width={15}
-                            height={15}
+                            width={20}
+                            height={20}
                             className="opacity-80 hover:opacity-100 transition cursor-pointer"
                           />
                         </button>
@@ -295,7 +300,6 @@ export default function LinksTable({
                             height={20}
                             className=" transition cursor-pointer"
                           />
-
                         </button>
 
                         <button onClick={() => onDelete(l.code)} disabled={deleting === l.code}>
@@ -307,8 +311,17 @@ export default function LinksTable({
                             className=" transition cursor-pointer"
                           />
                         </button>
+                      </td>
 
 
+                       <td className="py-3 px-4 text-center">
+                        {l.expiresAt
+                          ? new Date(l.expiresAt) < new Date()
+                            ? <span className="text-red-600 text-xs font-semibold">Expired</span>
+                            : <span className="text-green-600 text-xs font-semibold">Active</span>
+                          : <span className="text-gray-500 text-xs">No expiry</span>
+                        }
+                        
                       </td>
                     </tr>
                   );

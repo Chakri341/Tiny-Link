@@ -4,6 +4,7 @@ export type LinkItem = {
   clicks: number;
   lastClicked: Date | null;
   createdAt: Date;
+  expiresAt: Date | null; 
 };
 
 export interface LinksTableProps {
