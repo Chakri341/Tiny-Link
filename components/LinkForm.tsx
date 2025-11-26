@@ -9,6 +9,8 @@ export default function LinkForm({ onCreate }: { onCreate: (link: any) => void }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<string>("");
+  const [password, setPassword] = useState("");
+
 
 
   async function handleSubmit(e: React.FormEvent) {
@@ -34,7 +36,8 @@ export default function LinkForm({ onCreate }: { onCreate: (link: any) => void }
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           url, code: code || undefined,
-          expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null
+          expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null,
+          password: password || undefined,
         }),
       });
 
@@ -99,6 +102,17 @@ export default function LinkForm({ onCreate }: { onCreate: (link: any) => void }
           placeholder="Custom code (optional)"
           value={code}
           onChange={(e) => setCode(e.target.value)}
+        />
+
+        {/* Password */}
+        <input
+          type="password"
+          className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700
+            text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 w-full focus:ring-2
+            focus:ring-blue-500 focus:outline-none"
+          placeholder="Password (optional)"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <input

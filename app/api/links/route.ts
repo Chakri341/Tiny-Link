@@ -1,6 +1,7 @@
 import prisma from "../../../lib/prisma"
 import { NextResponse } from "next/server"
 import { nanoid } from "nanoid"
+import bcrypt from "bcryptjs";
 
 
 export const revalidate = 0;
@@ -30,9 +31,8 @@ export async function GET(req: Request) {
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}))
-  const { url, code, expiresAt } = body
-
-
+  const { url, code, expiresAt, password } = body;
+  
   if (!url)
     return NextResponse.json({ error: "Missing URL" }, { status: 400 })
 
@@ -46,17 +46,28 @@ export async function POST(request: Request) {
   }
 
   const finalCode = code || nanoid(7)
+  const passwordHash = password ? await bcrypt.hash(password, 10) : null;
 
 
   const created = await prisma.link.create({
     data: {
-      code: finalCode, url, expiresAt: expiresAt ? new Date(expiresAt) : null
+      code: finalCode,
+      url,
+      expiresAt: expiresAt ? new Date(expiresAt) : null,
+      passwordHash,
     },
   })
+
+  const safe = {
+    ...created,
+    passwordHash: undefined,
+  };
+
+
   console.log("created ====> ", created)
 
 
-  return NextResponse.json(created, { status: 201 })
+  return NextResponse.json(safe, { status: 201 })
 }
 
 

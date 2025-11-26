@@ -219,6 +219,17 @@ export default function LinksTable({
                             {l.code}
                           </Link>
 
+                          {l.passwordHash && (
+                            <Image
+                              src="/lock.png"
+                              alt="Protected"
+                              width={14}
+                              height={14}
+                              title="Password Protected"
+                              className=""
+                            />
+                          )}
+
                           <a
                             href={shortUrl}
                             // target="_blank"
@@ -263,7 +274,7 @@ export default function LinksTable({
                         </a>
                       </td>
 
-                     
+
 
 
                       <td className="py-3 px-4 text-right flex items-center gap-2 justify-end">
@@ -314,14 +325,14 @@ export default function LinksTable({
                       </td>
 
 
-                       <td className="py-3 px-4 text-center">
+                      <td className="py-3 px-4 text-center">
                         {l.expiresAt
                           ? new Date(l.expiresAt) < new Date()
                             ? <span className="text-red-600 text-xs font-semibold">Expired</span>
                             : <span className="text-green-600 text-xs font-semibold">Active</span>
                           : <span className="text-gray-500 text-xs">No expiry</span>
                         }
-                        
+
                       </td>
                     </tr>
                   );

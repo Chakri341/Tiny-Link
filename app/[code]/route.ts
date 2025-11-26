@@ -13,9 +13,13 @@ export async function GET(
   if (!link) return new Response("Not Found", { status: 404 })
 
   const origin = await getBaseUrl();
-  console.log("entered ", origin, link.expiresAt)
+
   if (link.expiresAt && new Date(link.expiresAt) < new Date()) {
     return NextResponse.redirect(`${origin}/expired`);
+  }
+
+  if (link.passwordHash) {
+    return NextResponse.redirect(`${origin}/password/${params.code}`);
   }
 
   await prisma.link.update({

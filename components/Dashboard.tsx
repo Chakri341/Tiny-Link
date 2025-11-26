@@ -13,7 +13,6 @@ export default async function Dashboard() {
     take: PAGE_SIZE,
   });
 
-  // Determine if more pages exist
   const hasMore = links.length === PAGE_SIZE;
 
   // console.log("data dash ==>>>>>>>>>>>>", { links, hasMore });

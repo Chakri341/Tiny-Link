@@ -5,6 +5,7 @@ export type LinkItem = {
   lastClicked: Date | null;
   createdAt: Date;
   expiresAt: Date | null; 
+  passwordHash :string | null
 };
 
 export interface LinksTableProps {

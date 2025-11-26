@@ -8,10 +8,11 @@ datasource db {
 }
 
 model Link {
-  code        String   @id @unique @db.VarChar(8)
-  url         String
-  clicks      Int      @default(0)
-  createdAt   DateTime @default(now())
-  lastClicked DateTime?
-  expiresAt   DateTime?  
+  code         String    @id @unique @db.VarChar(8)
+  url          String
+  clicks       Int       @default(0)
+  createdAt    DateTime  @default(now())
+  lastClicked  DateTime?
+  expiresAt    DateTime?
+  passwordHash String?
 }
