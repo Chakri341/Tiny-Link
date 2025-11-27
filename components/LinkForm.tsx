@@ -57,10 +57,11 @@ export default function LinkForm({ onCreate }: { onCreate: (link: any) => void }
         return;
       }
 
-      onCreate(data); // update table instantly
+      onCreate(data, password); // update table instantly
       setUrl("");
       setCode("");
       setExpiresAt("");
+      setPassword("")
       toast.success("Link created successfully!");
     } catch {
       setError("Something went wrong");
@@ -117,6 +118,7 @@ export default function LinkForm({ onCreate }: { onCreate: (link: any) => void }
 
         <input
           type="date"
+          placeholder="Expiry (optional)"
           className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
           value={expiresAt}
           onChange={(e) => setExpiresAt(e.target.value)}

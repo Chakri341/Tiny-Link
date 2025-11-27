@@ -33,8 +33,8 @@ export default function LinksTable({
     setOrigin(window.location.origin);
   }, []);
 
-  const addLink = (newLink: LinkItem) => {
-    setItems(prev => [newLink, ...prev]);
+  const addLink = (newLink: LinkItem, password:string) => {
+    setItems(prev => [{...newLink, passwordHash:password}, ...prev]);
   };
 
   const filtered = items.filter(
@@ -317,8 +317,8 @@ export default function LinksTable({
                           <Image
                             src="/trash.png"
                             alt="Delete"
-                            width={20}
-                            height={20}
+                            width={24}
+                            height={24}
                             className=" transition cursor-pointer"
                           />
                         </button>
