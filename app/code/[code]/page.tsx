@@ -15,6 +15,9 @@ export default async function StatsPage({ params }: { params: { code: string } }
 
   const shortUrl = `${origin}/${link.code}`
 
+//   if (Math.random() > 0) {
+//   throw new Error("Testing stats page error");
+// }
 
   return <StatsClient link={{ ...link, shortUrl }} />
 }

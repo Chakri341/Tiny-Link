@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function LinkForm({ onCreate }: { onCreate: (link: any) => void }) {
+export default function LinkForm({ onCreate }: { onCreate: (link: any, password:string) => void }) {
   const [url, setUrl] = useState("");
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);

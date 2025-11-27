@@ -17,6 +17,10 @@ export default async function Dashboard() {
 
   // console.log("data dash ==>>>>>>>>>>>>", { links, hasMore });
 
+//   if (Math.random() > 0) {
+//   throw new Error("Test Crash");
+// }
+
 
   return (
     <div className="space-y-2">

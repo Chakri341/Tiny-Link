@@ -24,6 +24,7 @@ export async function GET(req: Request) {
   });
 
   const hasMore = links.length === limit;
+    // return Response.json({}, { status: 500 });
 
   return Response.json({ links, hasMore });
 }

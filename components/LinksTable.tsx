@@ -9,6 +9,7 @@ import AnalyticsChart from "./AnalyticsChart";
 import QRCodeModal from "./QRCodeModal";
 import Image from "next/image";
 import ShareModal from "./ShareModal";
+import SeedButton from "./Seedbutton";
 
 export default function LinksTable({
   initialLinks,
@@ -27,14 +28,16 @@ export default function LinksTable({
   const [sortBy, setSortBy] = useState<"code" | "clicks" | "lastClicked" | "createdAt">("createdAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [shareFor, setShareFor] = useState<string | null>(null);
+  const [pageError, setPageError] = useState<string | null>(null);
+
 
 
   useEffect(() => {
     setOrigin(window.location.origin);
   }, []);
 
-  const addLink = (newLink: LinkItem, password:string) => {
-    setItems(prev => [{...newLink, passwordHash:password}, ...prev]);
+  const addLink = (newLink: LinkItem, password: string) => {
+    setItems(prev => [{ ...newLink, passwordHash: password }, ...prev]);
   };
 
   const filtered = items.filter(
@@ -45,20 +48,32 @@ export default function LinksTable({
 
   async function goToPage(newPage: number) {
     setLoadingPage(true);
+    setPageError(null);
+
     try {
       const res = await fetch(`/api/links?page=${newPage}&limit=${pageSize}`);
-      if (!res.ok) return toast.error("Failed to load page");
 
+      if (!res.ok) {
+        const msg = "Failed to load page";
+        setPageError(msg);
+        toast.error(msg);
+        setLoadingPage(false);
+        return;
+      }
       const data = await res.json();
       setItems(data.links);
       setPage(newPage);
       setHasMore(data.hasMore);
     } catch {
-      toast.error("Failed to load page");
+      const msg = "Network error while loading page";
+      setPageError(msg);
+      toast.error(msg);
+
     } finally {
       setLoadingPage(false);
     }
   }
+
 
   function copyToClipboard(text: string, code: string) {
     navigator.clipboard.writeText(text);
@@ -117,11 +132,14 @@ export default function LinksTable({
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-[85vh]">
 
+
       {/* FORM */}
       <div className="col-span-1 rounded-xl shadow-sm border  dark:bg-slate-800 dark:border-slate-700 self-start">
         <div className="flex flex-col gap-3">
           <LinkForm onCreate={addLink} />
           <AnalyticsChart />
+          <SeedButton />
+
         </div>
       </div>
 
@@ -356,6 +374,15 @@ export default function LinksTable({
             Page {page} {hasMore ? "" : "(last page)"}
           </span>
 
+          {pageError && (
+            <button
+              onClick={() => goToPage(page)}
+              className="text-[11px] text-red-600 hover:underline"
+            >
+              Retry loading
+            </button>
+          )}
+
           <button
             disabled={!hasMore || loadingPage}
             onClick={() => goToPage(page + 1)}
@@ -381,6 +408,6 @@ export default function LinksTable({
 
 
       </div>
-    </div>
+    </div >
   );
 }
