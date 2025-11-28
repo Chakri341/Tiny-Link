@@ -9,8 +9,10 @@ export async function GET(
     where: { code: params.code },
   })
   if (!link) return NextResponse.json({ error: "Not found" }, { status: 404 })
+ 
   return NextResponse.json(link)
 }
+
 
 export async function DELETE(
   req: Request,

@@ -1,3 +1,4 @@
+import { getBaseUrl } from "@/utils/getBaseUrl";
 import prisma from "../../lib/prisma"
 import { NextResponse } from "next/server"
 
@@ -10,6 +11,16 @@ export async function GET(
   })
 
   if (!link) return new Response("Not Found", { status: 404 })
+
+  const origin = await getBaseUrl();
+
+  if (link.expiresAt && new Date(link.expiresAt) < new Date()) {
+    return NextResponse.redirect(`${origin}/expired`);
+  }
+
+  if (link.passwordHash) {
+    return NextResponse.redirect(`${origin}/password/${params.code}`);
+  }
 
   await prisma.link.update({
     where: { code: params.code },

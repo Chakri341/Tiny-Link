@@ -42,5 +42,8 @@ export async function GET() {
     };
   });
 
+  // return Response.json({}, { status: 500 });
+
+
   return NextResponse.json(result);
 }

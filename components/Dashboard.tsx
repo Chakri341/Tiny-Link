@@ -1,6 +1,7 @@
+import { getAccessTokenFromCookies, verifyAccessToken } from "@/lib/auth";
 import LinksTable from "./LinksTable";
 import prisma from "@/lib/prisma";
-import SeedButton from "./Seedbutton";
+import { redirect } from "next/navigation";
 
 const PAGE_SIZE = 20;
 
@@ -8,11 +9,32 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Dashboard() {
- const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/links?page=1&limit=${PAGE_SIZE}`, {
-    cache: "no-store",
+
+
+  const token = getAccessTokenFromCookies();
+  if (!token) redirect("/login");
+
+  const payload = verifyAccessToken(token);
+  if (!payload) redirect("/login");
+
+  const user = await prisma.user.findUnique({
+    where: { id: payload.userId },
   });
 
-  const data = await res.json();
+  if (!user) redirect("/login");
+
+  const links = await prisma.link.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+    take: PAGE_SIZE,
+  });
+  const hasMore = links.length === PAGE_SIZE;
+
+
+  // console.log("data dash ==>>>>>>>>>>>>", { links, hasMore });
+  //   if (Math.random() > 0) {
+  //   throw new Error("Test Crash");
+  // }
 
 
   return (
@@ -22,11 +44,19 @@ export default async function Dashboard() {
       </div> */}
 
       <LinksTable
-        initialLinks={data.links}
+        initialLinks={links}
         pageSize={PAGE_SIZE}
-        initialHasMore={data.hasMore}
+        initialHasMore={hasMore}
       />
     </div>
 
   );
 }
+
+
+
+
+// const links = await prisma.link.findMany({
+//   orderBy: { createdAt: "desc" },
+//   take: PAGE_SIZE,
+// });
