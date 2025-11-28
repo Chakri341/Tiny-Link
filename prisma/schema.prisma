@@ -15,4 +15,9 @@ model Link {
   lastClicked  DateTime?
   expiresAt    DateTime?
   passwordHash String?
+
+  @@index([createdAt])
+  @@index([expiresAt])
+  @@index([clicks])
+  @@index([createdAt, code])
 }
