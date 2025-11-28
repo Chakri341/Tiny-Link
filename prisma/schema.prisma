@@ -16,8 +16,38 @@ model Link {
   expiresAt    DateTime?
   passwordHash String?
 
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      String?
+
   @@index([createdAt])
   @@index([expiresAt])
   @@index([clicks])
   @@index([createdAt, code])
+}
+
+model User {
+  id          String         @id @default(cuid())
+  email       String         @unique
+  name        String?
+  password    String?       
+  image       String?
+  provider    String         @default("credentials")
+  providerId  String?        
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  refreshTokens RefreshToken[]
+  links       Link[]
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([userId])
 }
