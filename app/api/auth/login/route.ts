@@ -1,4 +1,5 @@
-// app/api/auth/login/route.ts
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
