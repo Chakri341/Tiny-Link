@@ -10,8 +10,8 @@ export default function LogoutButton() {
       method: "POST",
     });
 
-    router.refresh(); // refresh cached server data
-    router.push("/login"); // redirect to login
+    router.push("/login"); 
+    router.refresh(); 
   }
 
   return (

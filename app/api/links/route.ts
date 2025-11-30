@@ -2,6 +2,7 @@ import prisma from "../../../lib/prisma"
 import { NextResponse } from "next/server"
 import { nanoid } from "nanoid"
 import bcrypt from "bcryptjs";
+import { getAccessTokenFromCookies, verifyAccessToken } from "@/lib/auth";
 
 
 export const revalidate = 0;
@@ -24,16 +25,28 @@ export async function GET(req: Request) {
   });
 
   const hasMore = links.length === limit;
-    // return Response.json({}, { status: 500 });
+  // return Response.json({}, { status: 500 });
 
   return Response.json({ links, hasMore });
 }
 
 
 export async function POST(request: Request) {
+
+  const token = await getAccessTokenFromCookies();
+  if (!token) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+
+  const payload = await verifyAccessToken(token);
+  if (!payload) {
+    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+  }
+
+  const userId = payload.userId;
   const body = await request.json().catch(() => ({}))
   const { url, code, expiresAt, password } = body;
-  
+
   if (!url)
     return NextResponse.json({ error: "Missing URL" }, { status: 400 })
 
@@ -56,6 +69,7 @@ export async function POST(request: Request) {
       url,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
       passwordHash,
+      userId: userId,
     },
   })
 
